@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Sorbarendezés Pontozó</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      background-color: #f7f9fa;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+
+    .config-panel {
+      background: #fff;
+      padding: 16px 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      padding: 6px 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin: 16px 0 8px 0;
+    }
+
+    .boxes-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .box-input {
+      width: 48px;
+      height: 48px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .box-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .box-input.correct {
+      background-color: #dcfce7;
+      border-color: #16a34a;
+      color: #15803d;
+    }
+
+    .box-input.incorrect {
+      background-color: #fee2e2;
+      border-color: #dc2626;
+      color: #b91c1c;
+    }
+
+    .result-panel {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Sorbarendezés Pontozó</h1>
+
+  <div class="config-panel">
+    <label for="item-count">Elemek száma:</label>
+    <input type="number" id="item-count" min="2" max="30" value="7">
+    <button id="generate-btn">Mezők generálása</button>
+  </div>
+
+  <div id="board" style="display: none;">
+    <div class="section-title">Helyes sorrend (kulcs):</div>
+    <div id="correct-inputs" class="boxes-container"></div>
+
+    <div class="section-title">Diák megoldása:</div>
+    <div id="student-inputs" class="boxes-container"></div>
+
+    <button id="evaluate-btn">Pontozás</button>
+    <div id="result-output" class="result-panel"></div>
+  </div>
+
+  <script>
+    const countInput = document.getElementById('item-count');
+    const generateBtn = document.getElementById('generate-btn');
+    const board = document.getElementById('board');
+    const correctContainer = document.getElementById('correct-inputs');
+    const studentContainer = document.getElementById('student-inputs');
+    const evaluateBtn = document.getElementById('evaluate-btn');
+    const resultOutput = document.getElementById('result-output');
+
+    function createBoxes() {
+      const n = parseInt(countInput.value, 10);
+      if (isNaN(n) || n < 2) {
+        alert('Kérlek adj meg legalább 2 elemet.');
+        return;
+      }
+
+      correctContainer.innerHTML = '';
+      studentContainer.innerHTML = '';
+      resultOutput.textContent = '';
+
+      for (let i = 0; i < n; i++) {
+        // Helyes sorrend mezők (alapértelmezetten beírjuk 1..N-ig segítségképp)
+        const cBox = document.createElement('input');
+        cBox.type = 'text';
+        cBox.className = 'box-input';
+        cBox.value = i + 1;
+        correctContainer.appendChild(cBox);
+
+        // Diák mezők
+        const sBox = document.createElement('input');
+        sBox.type = 'text';
+        sBox.className = 'box-input';
+        studentContainer.appendChild(sBox);
+      }
+
+      board.style.display = 'block';
+    }
+
+    function evaluateSubmission() {
+      const correctBoxes = Array.from(correctContainer.querySelectorAll('.box-input'));
+      const studentBoxes = Array.from(studentContainer.querySelectorAll('.box-input'));
+
+      const correctList = correctBoxes.map(b => b.value.trim());
+      const studentList = studentBoxes.map(b => b.value.trim());
+
+      const n = correctList.length;
+      let score = 0;
+
+      // Helyes szomszédsági relációk feltérképezése a helyes sorrend alapján
+      const expectedPrev = {};
+      const expectedNext = {};
+
+      for (let i = 0; i < n; i++) {
+        const item = correctList[i];
+        expectedPrev[item] = (i > 0) ? correctList[i - 1] : null;
+        expectedNext[item] = (i < n - 1) ? correctList[i + 1] : null;
+      }
+
+      studentBoxes.forEach(box => {
+        box.classList.remove('correct', 'incorrect');
+      });
+
+      for (let i = 0; i < n; i++) {
+        const item = studentList[i];
+        let isPointWorthy = false;
+
+        if (item !== '' && expectedPrev.hasOwnProperty(item)) {
+          const currentPrev = (i > 0) ? studentList[i - 1] : null;
+          const currentNext = (i < n - 1) ? studentList[i + 1] : null;
+
+          if (i === 0) {
+            // Első elem: csak a rákövetkező számít
+            if (currentNext === expectedNext[item]) {
+              isPointWorthy = true;
+            }
+          } else if (i === n - 1) {
+            // Utolsó elem: csak a megelőző számít
+            if (currentPrev === expectedPrev[item]) {
+              isPointWorthy = true;
+            }
+          } else {
+            // Belső elem: előtte és utána lévőnek is helyesnek kell lennie
+            if (currentPrev === expectedPrev[item] && currentNext === expectedNext[item]) {
+              isPointWorthy = true;
+            }
+          }
+        }
+
+        if (isPointWorthy) {
+          studentBoxes[i].classList.add('correct');
+          score++;
+        } else {
+          studentBoxes[i].classList.add('incorrect');
+        }
+      }
+
+      resultOutput.textContent = `Elért pontszám: ${score} / ${n}`;
+    }
+
+    generateBtn.addEventListener('click', createBoxes);
+    evaluateBtn.addEventListener('click', evaluateSubmission);
+
+    // Kezdéskor automatikusan legenerálja az alapértelmezett 7 mezőt
+    createBoxes();
+  </script>
+
+</body>
+</html>
