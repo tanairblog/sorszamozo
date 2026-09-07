@@ -1,480 +1,415 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sorbarendezés pontozó - hippi változat</title>
-<style>
-    /* 1. PSZICHEDELIKUS ALAPOK & HÁTTÉR */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorbarendezés pontozó - Psychedelic Edition</title>
+
+  <!-- Hippie / Pszichedelikus betűtípusok: Bungee Spice & Shrikhand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Shrikhand&display=swap" rel="stylesheet">
+
+  <style>
     :root {
-        --bg-color: #050115; /* Sötét űr alapszín */
-        --panel-bg: rgba(20, 0, 40, 0.85); /* Áttetsző sötét lila panelek */
-        --text-color: #e0faff; /* Világos cián szöveg */
-        --accent-purple: #9d4edd;
-        --accent-pink: #ff00ff;
-        --accent-cyan: #00ffff;
-        --accent-lime: #ccff00;
-        --correct-glow: 0 0 15px #00ff00, 0 0 25px #ccff00;
-        --incorrect-glow: 0 0 15px #ff0000, 0 0 25px #ff00ff;
-        --main-glow: 0 0 20px rgba(157, 78, 221, 0.7);
+      --neon-cyan: #00f0ff;
+      --neon-pink: #ff007f;
+      --neon-yellow: #ffea00;
+      --neon-green: #00ff66;
+      --neon-purple: #bd00ff;
+      --panel-bg: rgba(14, 2, 29, 0.82);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-        margin: 0;
-        padding: 20px;
-        font-family: 'Courier New', Courier, monospace; /* Retro-futurisztikus betűtípus */
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        /* Pszichedelikus foltos háttér generálása CSS-sel */
-        background-image: 
-            radial-gradient(circle at 20% 30%, rgba(255, 0, 255, 0.3) 0%, transparent 40%),
-            radial-gradient(circle at 80% 70%, rgba(0, 255, 255, 0.25) 0%, transparent 40%),
-            radial-gradient(circle at 50% 50%, rgba(204, 255, 0, 0.15) 0%, transparent 50%),
-            url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5QzRDQ0MiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIWMjB6TTAgMjBoMjB2MjBIMFYyMHoyMCAwaDIwdjIwSDIwVjB6Ii8+PC9nPjwvZz48L3N2Zz4='); /* Finom zaj textúra */
-        background-attachment: fixed;
+      margin: 0;
+      padding: 30px 16px;
+      min-height: 100vh;
+      color: #fff;
+      font-family: 'Shrikhand', cursive, sans-serif;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+
+      /* Pulzáló, örvénylő pszichedelikus háttér konikus és radiális gradiensekkel */
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(255, 0, 128, 0.65), transparent 45%),
+        radial-gradient(ellipse at 80% 40%, rgba(0, 240, 255, 0.65), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(255, 234, 0, 0.55), transparent 40%),
+        conic-gradient(from 180deg at 50% 50%, #ff0055, #ff9900, #ffee00, #00ff66, #00ccff, #7700ff, #ff00aa, #ff0055);
+      background-size: 200% 200%;
+      animation: psychedelicSwirl 18s ease-in-out infinite alternate;
     }
 
-    /* 2. PANEL STÍLUSOK (Cím és Konténerek) */
+    @keyframes psychedelicSwirl {
+      0% {
+        background-position: 0% 0%;
+        filter: hue-rotate(0deg) saturate(140%);
+      }
+      50% {
+        background-position: 100% 100%;
+        filter: hue-rotate(180deg) saturate(180%);
+      }
+      100% {
+        background-position: 0% 100%;
+        filter: hue-rotate(360deg) saturate(140%);
+      }
+    }
+
     .app-container {
-        max-width: 900px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+      width: 100%;
+      max-width: 920px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
     }
 
     .main-title {
-        text-align: center;
-        font-size: 3rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        color: var(--text-color);
-        text-shadow: 
-            0 0 10px var(--accent-cyan),
-            0 0 20px var(--accent-pink),
-            2px 2px 2px #000;
-        margin: 10px 0;
-        letter-spacing: 2px;
+      font-family: 'Bungee Spice', cursive;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      text-align: center;
+      margin: 0;
+      line-height: 1.15;
+      text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px var(--neon-pink),
+        0 0 40px var(--neon-purple);
+      filter: drop-shadow(4px 4px 0 #000);
     }
 
     .panel {
-        background: var(--panel-bg);
-        border: 2px solid var(--accent-purple);
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: var(--main-glow), inset 0 0 15px rgba(255, 0, 255, 0.2);
-        backdrop-filter: blur(5px);
+      background: var(--panel-bg);
+      border-radius: 26px;
+      padding: 22px 26px;
+      border: 3px solid var(--neon-cyan);
+      box-shadow:
+        0 0 20px rgba(0, 240, 255, 0.4),
+        inset 0 0 25px rgba(189, 0, 255, 0.35),
+        8px 8px 0 rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
     }
 
-    .panel-header {
-        font-size: 1.2rem;
-        color: var(--accent-lime);
-        margin-bottom: 15px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        text-shadow: 0 0 5px var(--accent-lime);
-    }
-
-    /* 3. KONFIGURÁCIÓS RÉSZ */
     .config-row {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 1.25rem;
+      color: var(--neon-yellow);
+      text-shadow: 2px 2px 0 #000;
     }
-
-    label { font-weight: bold; color: var(--accent-cyan); }
 
     input[type="number"] {
-        background: rgba(0, 0, 0, 0.5);
-        border: 2px solid var(--accent-pink);
-        color: var(--accent-lime);
-        padding: 10px;
-        font-size: 1.2rem;
-        border-radius: 10px;
-        width: 80px;
-        text-align: center;
-        outline: none;
-        box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+      font-family: 'Shrikhand', cursive;
+      width: 75px;
+      height: 52px;
+      background: #0f0522;
+      border: 3px solid var(--neon-pink);
+      border-radius: 14px;
+      color: var(--neon-yellow);
+      font-size: 1.5rem;
+      text-align: center;
+      outline: none;
+      box-shadow: 0 0 12px var(--neon-pink);
     }
 
-    input[type="number"]:focus {
-        border-color: var(--accent-cyan);
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    button {
+      font-family: 'Shrikhand', cursive;
+      cursor: pointer;
+      border: none;
+      border-radius: 16px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
     }
 
-    /* 4. SORBARENDEZŐ MEZŐK */
-    .sequence-row {
-        margin-bottom: 25px;
-        position: relative;
+    button:hover {
+      transform: scale(1.04) translateY(-2px);
     }
 
-    .row-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-generate {
+      background: linear-gradient(135deg, #00ff66, #ffea00);
+      color: #100220;
+      padding: 12px 26px;
+      font-size: 1.15rem;
+      box-shadow: 0 0 16px var(--neon-green);
+    }
+
+    .row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0 10px 0;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px var(--neon-cyan), 2px 2px 0 #000;
+    }
+
+    .btn-clear {
+      background: linear-gradient(135deg, #ff0055, #ff5500);
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
     }
 
     .boxes-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        min-height: 70px;
-        padding: 10px;
-        border: 1px dashed rgba(157, 78, 221, 0.5);
-        border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .box {
-        width: 60px;
-        height: 60px;
-        background: rgba(157, 78, 221, 0.2);
-        border: 3px solid var(--accent-purple);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: var(--accent-lime);
-        text-shadow: 0 0 5px #000;
-        box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .box:hover {
-        transform: scale(1.05) translateY(-3px);
-        background: rgba(157, 78, 221, 0.4);
-        border-color: var(--accent-pink);
-    }
-
-    /* Diák megoldás beviteli mezők stílusa */
     .box-input {
-        background: rgba(0, 0, 0, 0.3);
-        border-color: var(--accent-cyan);
-        color: var(--accent-cyan);
-        outline: none;
-        text-align: center;
+      font-family: 'Shrikhand', cursive;
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: #120324;
+      border: 3px solid var(--neon-purple);
+      color: #fff;
+      font-size: 1.6rem;
+      text-align: center;
+      outline: none;
+      box-shadow:
+        0 0 10px rgba(189, 0, 255, 0.4),
+        inset 0 0 8px rgba(0, 0, 0, 0.7);
+      transition: all 0.15s ease-in-out;
     }
-    
+
     .box-input:focus {
-        border-color: var(--accent-lime);
-        box-shadow: 0 0 10px var(--accent-lime);
+      border-color: var(--neon-yellow);
+      box-shadow: 0 0 18px var(--neon-yellow);
+      transform: scale(1.06);
     }
 
-    /* Pontozási állapotok */
-    .box.correct {
-        border-color: #00ff00;
-        background: rgba(0, 255, 0, 0.2);
-        color: #fff;
-        box-shadow: var(--correct-glow);
-        transform: scale(1.1);
+    .box-input.correct {
+      background: #022a16;
+      border-color: var(--neon-green) !important;
+      color: #adff2f !important;
+      box-shadow:
+        0 0 20px var(--neon-green),
+        inset 0 0 10px var(--neon-green) !important;
+      animation: groovyPop 0.4s ease-out;
     }
 
-    .box.incorrect {
-        border-color: #ff0000;
-        background: rgba(255, 0, 0, 0.2);
-        color: #ffcccc;
-        box-shadow: var(--incorrect-glow);
+    .box-input.incorrect {
+      background: #340012;
+      border-color: #ff0037 !important;
+      color: #ff99aa !important;
+      box-shadow:
+        0 0 18px #ff0037,
+        inset 0 0 8px #ff0037 !important;
     }
 
-    /* 5. GOMBOK */
-    button {
-        padding: 12px 24px;
-        font-size: 1rem;
-        font-family: inherit;
-        font-weight: bold;
-        text-transform: uppercase;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        letter-spacing: 1px;
+    @keyframes groovyPop {
+      0% { transform: scale(0.8); }
+      50% { transform: scale(1.18) rotate(-4deg); }
+      100% { transform: scale(1) rotate(0deg); }
     }
 
-    /* Generálás gomb (Zöldes) */
-    .btn-generate {
-        background: linear-gradient(135deg, #ccff00 0%, #00ff00 100%);
-        color: #050115;
-        box-shadow: 0 0 15px rgba(204, 255, 0, 0.6);
-    }
-    .btn-generate:hover {
-        box-shadow: 0 0 25px rgba(204, 255, 0, 0.9);
-        transform: translateY(-2px);
-    }
-
-    /* Pontozás gomb (Nagy, lila, a kép alján) */
     .btn-score {
-        background: linear-gradient(135deg, #ff00ff 0%, #9d4edd 100%);
-        color: #fff;
-        font-size: 1.5rem;
-        width: 100%;
-        margin-top: 10px;
-        box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
-        text-shadow: 0 0 5px #000;
-    }
-    .btn-score:hover {
-        box-shadow: 0 0 35px rgba(255, 0, 255, 0.8);
-        filter: brightness(1.1);
+      width: 100%;
+      margin-top: 14px;
+      padding: 16px;
+      background: linear-gradient(90deg, #ff007f, #bd00ff, #00f0ff);
+      background-size: 200% 200%;
+      animation: buttonRainbow 5s linear infinite;
+      color: #fff;
+      font-size: 1.7rem;
+      box-shadow: 0 0 24px rgba(255, 0, 127, 0.7);
     }
 
-    /* Törlés gombok (Kicsi, pirosas) */
-    .btn-clear {
-        background: rgba(255, 0, 0, 0.2);
-        border: 2px solid #ff0000;
-        color: #ffcccc;
-        padding: 5px 10px;
-        font-size: 0.8rem;
-        border-radius: 6px;
-    }
-    .btn-clear:hover {
-        background: rgba(255, 0, 0, 0.4);
-        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    @keyframes buttonRainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    /* 6. EREDMÉNY JELZŐ */
-    .result-display {
-        text-align: center;
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: var(--accent-cyan);
-        text-shadow: 0 0 15px var(--accent-cyan);
-        margin-top: 10px;
-        min-height: 3rem;
+    .result-panel {
+      margin-top: 20px;
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--neon-green);
+      text-shadow:
+        0 0 12px var(--neon-green),
+        0 0 30px rgba(0, 255, 102, 0.8),
+        3px 3px 0 #000;
+      min-height: 3rem;
     }
-
-    /* Reszponzivitás */
-    @media (max-width: 600px) {
-        .main-title { font-size: 1.8rem; }
-        .box { width: 45px; height: 45px; font-size: 1.2rem; }
-        .result-display { font-size: 1.8rem; }
-    }
-</style>
+  </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="main-title">Sorbarendezés pontozó</div>
+  <div class="app-container">
+    <h1 class="main-title">Sorbarendezés pontozó</h1>
 
-    <!-- Konfigurációs Panel -->
-    <div class="panel config-panel">
-        <div class="config-row">
-            <label for="itemCount">Elemek száma:</label>
-            <input type="number" id="itemCount" min="2" max="20" value="7">
-            <button class="btn-generate" onclick="generateFields()">Mezők generálása</button>
-        </div>
+    <div class="panel">
+      <div class="config-row">
+        <label for="item-count">Elemek száma:</label>
+        <input type="number" id="item-count" min="2" max="25" value="7">
+        <button id="generate-btn" class="btn-generate" type="button">Mezők generálása</button>
+      </div>
     </div>
 
-    <!-- Játék Board Panel (alapból rejtve) -->
-    <div class="panel score-panel" id="scoreBoard" style="display:none;">
-        
-        <!-- Helyes Sorrend Szekció -->
-        <div class="sequence-row">
-            <div class="row-controls">
-                <div class="panel-header">Helyes sorrend (kulcs):</div>
-                <button class="btn-clear" onclick="clearRow('correctContainer')">Törlés</button>
-            </div>
-            <div class="boxes-container" id="correctContainer">
-                <!-- Ide kerülnek a kulcs kockák -->
-            </div>
-        </div>
+    <div id="board" class="panel" style="display: none;">
+      <!-- Helyes sorrend -->
+      <div class="row-header">
+        <span class="section-title">Helyes sorrend (kulcs):</span>
+        <button id="clear-correct-btn" class="btn-clear" type="button">Kulcs törlése</button>
+      </div>
+      <div id="correct-inputs" class="boxes-container"></div>
 
-        <!-- Diák Megoldása Szekció -->
-        <div class="sequence-row">
-            <div class="row-controls">
-                <div class="panel-header">Diák megoldása:</div>
-                <button class="btn-clear" onclick="clearRow('studentContainer')">Törlés</button>
-            </div>
-            <div class="boxes-container" id="studentContainer">
-                <!-- Ide kerülnek a diák beviteli kockái -->
-            </div>
-        </div>
+      <!-- Diák megoldása -->
+      <div class="row-header">
+        <span class="section-title">Diák megoldása:</span>
+        <button id="clear-student-btn" class="btn-clear" type="button">Diák válasz törlése</button>
+      </div>
+      <div id="student-inputs" class="boxes-container"></div>
 
-        <!-- Pontozás Gomb -->
-        <button class="btn-score" onclick="calculateScore()">Pontozás</button>
-
-        <!-- Eredmény Megjelenítő -->
-        <div class="result-display" id="resultDisplay"></div>
+      <button id="evaluate-btn" class="btn-score" type="button">Pontozás</button>
+      <div id="result-output" class="result-panel"></div>
     </div>
-</div>
+  </div>
 
-<script>
-    // Fő állapotjelzők
-    let currentN = 0;
+  <script>
+    const countInput = document.getElementById('item-count');
+    const generateBtn = document.getElementById('generate-btn');
+    const board = document.getElementById('board');
+    const correctContainer = document.getElementById('correct-inputs');
+    const studentContainer = document.getElementById('student-inputs');
+    const evaluateBtn = document.getElementById('evaluate-btn');
+    const clearCorrectBtn = document.getElementById('clear-correct-btn');
+    const clearStudentBtn = document.getElementById('clear-student-btn');
+    const resultOutput = document.getElementById('result-output');
 
-    // 1. Mezők generálása
-    function generateFields() {
-        const countInput = document.getElementById('itemCount');
-        let n = parseInt(countInput.value);
-
-        // Validálás
-        if (isNaN(n) || n < 2) n = 2;
-        if (n > 20) n = 20; // Felső határ a kezelhetőségért
-        countInput.value = n;
-        currentN = n;
-
-        const correctContainer = document.getElementById('correctContainer');
-        const studentContainer = document.getElementById('studentContainer');
-        const scoreboard = document.getElementById('scoreBoard');
-        const resultDisplay = document.getElementById('resultDisplay');
-
-        // Konténerek kiürítése
-        correctContainer.innerHTML = '';
-        studentContainer.innerHTML = '';
-        resultDisplay.innerText = '';
-        scoreboard.style.display = 'block';
-
-        for (let i = 0; i < n; i++) {
-            // A. Helyes sorrend kockák (szerkeszthető div-ek)
-            const correctBox = document.createElement('div');
-            correctBox.className = 'box';
-            correctBox.contentEditable = true; // Engedjük, hogy a tanár beírja a kulcsot
-            correctBox.innerText = i + 1; // Alapértelmezett sorrend
-            correctBox.id = `correct-${i}`;
-            // Automatikus kijelölés kattintáskor
-            correctBox.addEventListener('click', () => document.execCommand('selectAll',false,null));
-            correctContainer.appendChild(correctBox);
-
-            // B. Diák megoldás kockák (input mezők)
-            const studentInput = document.createElement('input');
-            studentInput.type = 'text';
-            studentInput.className = 'box box-input';
-            studentInput.id = `student-${i}`;
-            studentInput.maxLength = 3; // Ne legyen túl hosszú a szöveg
-            studentContainer.appendChild(studentInput);
-        }
+    function resetEvaluationStyles() {
+      studentContainer.querySelectorAll('.box-input').forEach(box => {
+        box.classList.remove('correct', 'incorrect');
+      });
+      resultOutput.textContent = '';
     }
 
-    // 2. Egy sor kiürítése
-    function clearRow(containerId) {
-        const container = document.getElementById(containerId);
-        const boxes = container.querySelectorAll('.box');
-        boxes.forEach(box => {
-            if (box.tagName === 'INPUT') {
-                box.value = '';
-            } else {
-                box.innerText = '';
-            }
-            // Színezés eltávolítása törléskor
-            box.classList.remove('correct', 'incorrect');
-        });
-        document.getElementById('resultDisplay').innerText = '';
+    function createBoxes() {
+      const n = parseInt(countInput.value, 10);
+      if (isNaN(n) || n < 2) {
+        alert('Kérlek adj meg legalább 2 elemet.');
+        return;
+      }
+
+      correctContainer.innerHTML = '';
+      studentContainer.innerHTML = '';
+      resetEvaluationStyles();
+
+      for (let i = 0; i < n; i++) {
+        // Helyes sorrend mezők (alapértelmezetten 1..N)
+        const cBox = document.createElement('input');
+        cBox.type = 'text';
+        cBox.className = 'box-input';
+        cBox.value = i + 1;
+        correctContainer.appendChild(cBox);
+
+        // Diák mezők
+        const sBox = document.createElement('input');
+        sBox.type = 'text';
+        sBox.className = 'box-input';
+        studentContainer.appendChild(sBox);
+      }
+
+      board.style.display = 'block';
     }
 
-    // 3. Pontozási logika (A feladat lényege)
-    function calculateScore() {
-        if (currentN === 0) return;
+    function evaluateSubmission() {
+      const correctBoxes = Array.from(correctContainer.querySelectorAll('.box-input'));
+      const studentBoxes = Array.from(studentContainer.querySelectorAll('.box-input'));
 
-        let totalScore = 0;
-        const correctList = [];
-        const studentList = [];
-        const studentBoxes = [];
+      const correctList = correctBoxes.map(b => b.value.trim());
+      const studentList = studentBoxes.map(b => b.value.trim());
 
-        // Adatok begyűjtése
-        for (let i = 0; i < currentN; i++) {
-            const cBox = document.getElementById(`correct-${i}`);
-            const sBox = document.getElementById(`student-${i}`);
-            
-            // Tisztítjuk az adatokat (szóközök nélkül)
-            const cVal = cBox.innerText.trim();
-            const sVal = sBox.value.trim();
+      const n = correctList.length;
+      let score = 0;
 
-            correctList.push(cVal);
-            studentList.push(sVal);
-            studentBoxes.push(sBox);
+      // Helyes szomszédossági tábla a kulcs szerint
+      const expectedPrev = {};
+      const expectedNext = {};
 
-            // Előző színezés eltávolítása
-            sBox.classList.remove('correct', 'incorrect');
+      for (let i = 0; i < n; i++) {
+        const item = correctList[i];
+        expectedPrev[item] = (i > 0) ? correctList[i - 1] : null;
+        expectedNext[item] = (i < n - 1) ? correctList[i + 1] : null;
+      }
+
+      resetEvaluationStyles();
+
+      for (let i = 0; i < n; i++) {
+        const item = studentList[i];
+        let isPointWorthy = false;
+
+        if (item !== '' && Object.prototype.hasOwnProperty.call(expectedPrev, item)) {
+          const currentPrev = (i > 0) ? studentList[i - 1] : null;
+          const currentNext = (i < n - 1) ? studentList[i + 1] : null;
+
+          if (i === 0) {
+            // Első elem: a rákövetkező elemnek kell helyesnek lennie
+            if (currentNext === expectedNext[item]) {
+              isPointWorthy = true;
+            }
+          } else if (i === n - 1) {
+            // Utolsó elem: a megelőző elemnek kell helyesnek lennie
+            if (currentPrev === expectedPrev[item]) {
+              isPointWorthy = true;
+            }
+          } else {
+            // Belső elem: mindkét szomszédnak egyeznie kell a helyessel
+            if (currentPrev === expectedPrev[item] && currentNext === expectedNext[item]) {
+              isPointWorthy = true;
+            }
+          }
         }
 
-        // PONTOZÁSI ALGORITMUS
-        // Szabály: Pont jár, ha az előtte és utána lévő elemek helyesek a kulcshoz képest.
-
-        for (let i = 0; i < currentN; i++) {
-            const currentStudentItem = studentList[i];
-            
-            // Ha a diák nem írt be semmit, átugorjuk
-            if (currentStudentItem === "") {
-                studentBoxes[i].classList.add('incorrect');
-                continue;
-            }
-
-            // Megkeressük, hol kellene lennie ennek az elemnek a helyes sorrendben
-            const correctIndex = correctList.indexOf(currentStudentItem);
-
-            // Ha az elem nincs is benne a kulcsban, hibás
-            if (correctIndex === -1) {
-                studentBoxes[i].classList.add('incorrect');
-                continue;
-            }
-
-            // Ellenőrizzük a szomszédokat
-            let prevCorrect = false;
-            let nextCorrect = false;
-
-            // A. ELŐZŐ SZOMSZÉD ELLENŐRZÉSE
-            if (i === 0) {
-                // Ha ez a diák első eleme, akkor pontot ér, ha a kulcsban is ez az első.
-                if (correctIndex === 0) prevCorrect = true;
-            } else {
-                // Nem az első elem. Nézzük a diák előző elemét.
-                const studentPrevItem = studentList[i - 1];
-                // Pontot ér, ha a diák előző eleme megegyezik azzal, ami a kulcsban ezen hely előtt áll.
-                if (studentPrevItem === correctList[correctIndex - 1]) {
-                    prevCorrect = true;
-                }
-            }
-
-            // B. KÖVETKEZŐ SZOMSZÉD ELLENŐRZÉSE
-            if (i === currentN - 1) {
-                // Ha ez a diák utolsó eleme, akkor pontot ér, ha a kulcsban is ez az utolsó.
-                if (correctIndex === currentN - 1) nextCorrect = true;
-            } else {
-                // Nem az utolsó elem. Nézzük a diák következő elemét.
-                const studentNextItem = studentList[i + 1];
-                // Pontot ér, ha a diák következő eleme megegyezik azzal, ami a kulcsban ezen hely után áll.
-                if (studentNextItem === correctList[correctIndex + 1]) {
-                    nextCorrect = true;
-                }
-            }
-
-            // C. VÉGSŐ PONTOZÁS: Mindkét szomszédnak (vagy határesetnek) stimmelnie kell
-            if (prevCorrect && nextCorrect) {
-                totalScore++;
-                studentBoxes[i].classList.add('correct');
-            } else {
-                studentBoxes[i].classList.add('incorrect');
-            }
+        if (isPointWorthy) {
+          studentBoxes[i].classList.add('correct');
+          score++;
+        } else {
+          studentBoxes[i].classList.add('incorrect');
         }
+      }
 
-        // Eredmény kiírása
-        const resultDisplay = document.getElementById('resultDisplay');
-        resultDisplay.innerText = `Elért pontszám: ${totalScore} / ${currentN}`;
-        
-        // Pszichedelikus pulzálás az eredménynek
-        resultDisplay.style.animation = 'none';
-        resultDisplay.offsetHeight; /* trigger reflow */
-        resultDisplay.style.animation = 'resultGlow 1s ease-in-out infinite alternate';
+      resultOutput.textContent = `Elért pontszám: ${score} / ${n}`;
     }
 
-    // Eredmény pulzáló animáció CSS-be fűzése JS-ből
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes resultGlow {
-            from { text-shadow: 0 0 10px var(--accent-cyan); }
-            to { text-shadow: 0 0 25px var(--accent-cyan), 0 0 10px var(--accent-pink); transform: scale(1.05); }
-        }
-    `;
-    document.head.appendChild(style);
+    generateBtn.addEventListener('click', createBoxes);
+    evaluateBtn.addEventListener('click', evaluateSubmission);
 
-    // Indításkor generáljunk egy alapértelmezett sort
-    generateFields();
+    clearCorrectBtn.addEventListener('click', () => {
+      correctContainer.querySelectorAll('.box-input').forEach(box => {
+        box.value = '';
+      });
+      resetEvaluationStyles();
+    });
 
-</script>
+    clearStudentBtn.addEventListener('click', () => {
+      const inputs = studentContainer.querySelectorAll('.box-input');
+      inputs.forEach(box => {
+        box.value = '';
+      });
+      resetEvaluationStyles();
+      if (inputs.length > 0) {
+        inputs[0].focus();
+      }
+    });
 
+    createBoxes();
+  </script>
 </body>
 </html>
