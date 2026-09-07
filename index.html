@@ -47,22 +47,43 @@
       border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
+      transition: background-color 0.15s ease;
     }
 
     button:hover {
       background-color: #1d4ed8;
     }
 
+    /* Kisebb másodlagos törlőgombok */
+    button.btn-clear {
+      background-color: #e2e8f0;
+      color: #334155;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+
+    button.btn-clear:hover {
+      background-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin: 20px 0 10px 0;
+    }
+
     .section-title {
       font-weight: 600;
-      margin: 16px 0 8px 0;
     }
 
     .boxes-container {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
 
     .box-input {
@@ -95,9 +116,13 @@
       color: #b91c1c;
     }
 
-    .result-panel {
+    .actions {
       margin-top: 20px;
-      font-size: 1.1rem;
+    }
+
+    .result-panel {
+      margin-top: 16px;
+      font-size: 1.15rem;
       font-weight: 600;
     }
   </style>
@@ -113,13 +138,24 @@
   </div>
 
   <div id="board" style="display: none;">
-    <div class="section-title">Helyes sorrend (kulcs):</div>
+    <!-- Helyes sorrend szekció -->
+    <div class="section-header">
+      <span class="section-title">Helyes sorrend (kulcs):</span>
+      <button id="clear-correct-btn" class="btn-clear" type="button">Kulcs törlése</button>
+    </div>
     <div id="correct-inputs" class="boxes-container"></div>
 
-    <div class="section-title">Diák megoldása:</div>
+    <!-- Diák megoldása szekció -->
+    <div class="section-header">
+      <span class="section-title">Diák megoldása:</span>
+      <button id="clear-student-btn" class="btn-clear" type="button">Diák válasz törlése</button>
+    </div>
     <div id="student-inputs" class="boxes-container"></div>
 
-    <button id="evaluate-btn">Pontozás</button>
+    <div class="actions">
+      <button id="evaluate-btn">Pontozás</button>
+    </div>
+
     <div id="result-output" class="result-panel"></div>
   </div>
 
@@ -130,7 +166,16 @@
     const correctContainer = document.getElementById('correct-inputs');
     const studentContainer = document.getElementById('student-inputs');
     const evaluateBtn = document.getElementById('evaluate-btn');
+    const clearCorrectBtn = document.getElementById('clear-correct-btn');
+    const clearStudentBtn = document.getElementById('clear-student-btn');
     const resultOutput = document.getElementById('result-output');
+
+    function resetEvaluationStyles() {
+      studentContainer.querySelectorAll('.box-input').forEach(box => {
+        box.classList.remove('correct', 'incorrect');
+      });
+      resultOutput.textContent = '';
+    }
 
     function createBoxes() {
       const n = parseInt(countInput.value, 10);
@@ -141,10 +186,10 @@
 
       correctContainer.innerHTML = '';
       studentContainer.innerHTML = '';
-      resultOutput.textContent = '';
+      resetEvaluationStyles();
 
       for (let i = 0; i < n; i++) {
-        // Helyes sorrend mezők (alapértelmezetten beírjuk 1..N-ig segítségképp)
+        // Helyes sorrend mezők
         const cBox = document.createElement('input');
         cBox.type = 'text';
         cBox.className = 'box-input';
@@ -171,7 +216,6 @@
       const n = correctList.length;
       let score = 0;
 
-      // Helyes szomszédsági relációk feltérképezése a helyes sorrend alapján
       const expectedPrev = {};
       const expectedNext = {};
 
@@ -181,9 +225,7 @@
         expectedNext[item] = (i < n - 1) ? correctList[i + 1] : null;
       }
 
-      studentBoxes.forEach(box => {
-        box.classList.remove('correct', 'incorrect');
-      });
+      resetEvaluationStyles();
 
       for (let i = 0; i < n; i++) {
         const item = studentList[i];
@@ -194,17 +236,14 @@
           const currentNext = (i < n - 1) ? studentList[i + 1] : null;
 
           if (i === 0) {
-            // Első elem: csak a rákövetkező számít
             if (currentNext === expectedNext[item]) {
               isPointWorthy = true;
             }
           } else if (i === n - 1) {
-            // Utolsó elem: csak a megelőző számít
             if (currentPrev === expectedPrev[item]) {
               isPointWorthy = true;
             }
           } else {
-            // Belső elem: előtte és utána lévőnek is helyesnek kell lennie
             if (currentPrev === expectedPrev[item] && currentNext === expectedNext[item]) {
               isPointWorthy = true;
             }
@@ -222,10 +261,28 @@
       resultOutput.textContent = `Elért pontszám: ${score} / ${n}`;
     }
 
+    // Gombok eseménykezelői
     generateBtn.addEventListener('click', createBoxes);
     evaluateBtn.addEventListener('click', evaluateSubmission);
 
-    // Kezdéskor automatikusan legenerálja az alapértelmezett 7 mezőt
+    clearCorrectBtn.addEventListener('click', () => {
+      correctContainer.querySelectorAll('.box-input').forEach(box => {
+        box.value = '';
+      });
+      resetEvaluationStyles();
+    });
+
+    clearStudentBtn.addEventListener('click', () => {
+      const inputs = studentContainer.querySelectorAll('.box-input');
+      inputs.forEach(box => {
+        box.value = '';
+      });
+      resetEvaluationStyles();
+      if (inputs.length > 0) {
+        inputs[0].focus();
+      }
+    });
+
     createBoxes();
   </script>
 
